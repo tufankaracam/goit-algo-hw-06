@@ -22,32 +22,40 @@ edges = [
 ]
 
 G.add_edges_from(edges)
+graph = {vertex: set([t for t in G.neighbors(vertex)]) for vertex in G}
 
 
 def dfs_paths(graph, start):
-    stack = [(start, [start])]
+    visited = set()
+    stack = [start]
+    path = []
     while stack:
-        (vertex, path) = stack.pop()
-        # print("DFS at node: ", vertex)
-        for next in graph[vertex] - set(path):
-            stack.append((next, path + [next]))
+        vertex = stack.pop()
+        if vertex not in visited:
+            visited.add(vertex)
+            path.append(vertex)
+            stack.extend(graph[vertex] - visited)
     return path
 
 
 def bfs_paths(graph, start):
-    queue = [(start, [start])]
+    visited = set()
+    queue = [start]
+    path = []
     while queue:
-        (vertex, path) = queue.pop(0)
-        # print("BFS at node: ", vertex)
-        for next in graph[vertex] - set(path):
-            queue.append((next, path + [next]))
+        vertex = queue.pop(0)
+        if vertex not in visited:
+            visited.add(vertex)
+            path.append(vertex)
+            queue.extend(graph[vertex] - visited)
     return path
 
 
-graph = {vertex: set([t for t in G.neighbors(vertex)]) for vertex in G}
+dfs_path = dfs_paths(graph, 'University')
+bfs_path = bfs_paths(graph, 'University')
 
-print("\nDFS path: ", dfs_paths(graph, 'University'))
-print("\nBFS path: ", bfs_paths(graph, 'University'))
+print(dfs_path)
+print(bfs_path)
 
 """
 Depth-First Search (DFS) and Breadth-First Search (BFS) are algorithms that traverse or search a graph or network and determine how one can reach other nodes from a particular starting node.
